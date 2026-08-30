@@ -1,2 +1,7 @@
+.env
 __pycache__/
 *.pyc
+
+# Hospital data - keep local
+hospital_rawdata/
+hospital_cleanedata/
