@@ -1,10 +1,62 @@
+import { useState } from "react";
+import "./App.css";
+import RequestPage from "./RequestPage";
 import "./App.css";
 
 function App() {
-  return (
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+const handleLogin = async (e) => {
+  e.preventDefault();
+
+  setError("");
+
+  if (!username || !password) {
+    setError("Please enter username and password.");
+    return;
+  }
+
+  try {
+    const response = await fetch("http://127.0.0.1:8000/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      setError(data.detail || "Invalid username or password.");
+      return;
+    }
+
+    // Save JWT token
+localStorage.setItem("access_token", data.access_token);
+
+// Open Request Page
+setIsLoggedIn(true);
+
+  } catch (error) {
+    setError("Unable to connect to server.");
+    console.error(error);
+  }
+};
+
+if (isLoggedIn) {
+  return <RequestPage />;
+}
+
+return (
     <div className="login-page">
 
-      {/* Background effects */}
       <div className="glow glow-one"></div>
       <div className="glow glow-two"></div>
 
@@ -81,8 +133,9 @@ function App() {
             <span></span>
           </div>
 
-          <form>
+          <form onSubmit={handleLogin}>
 
+            {/* USERNAME */}
             <label>Username</label>
 
             <div className="input-box">
@@ -91,24 +144,43 @@ function App() {
               <input
                 type="text"
                 placeholder="Enter your username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </div>
 
 
+            {/* PASSWORD */}
             <label>Password</label>
 
             <div className="input-box">
               <span>🔒</span>
 
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
 
-              <span className="eye">👁️</span>
+              <span
+                className="eye"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? "🙈" : "👁️"}
+              </span>
             </div>
 
 
+            {/* ERROR */}
+            {error && (
+              <p className="error-message">
+                ⚠️ {error}
+              </p>
+            )}
+
+
+            {/* LOGIN BUTTON */}
             <button className="login-button" type="submit">
               Login
               <span>→</span>

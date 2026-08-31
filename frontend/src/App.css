@@ -436,3 +436,10 @@ footer {
     margin: auto;
   }
 }
+.error-message {
+  color: #f87171;
+  font-size: 13px;
+  margin-top: -10px;
+  margin-bottom: 15px;
+  text-align: left;
+}
