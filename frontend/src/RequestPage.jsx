@@ -4,6 +4,7 @@ import "./RequestPage.css";
 function RequestPage() {
   const [request, setRequest] = useState("");
   const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const quickRequests = [
     "Show me customer CUST001's details",
@@ -11,7 +12,7 @@ function RequestPage() {
     "Delete customer CUST001",
   ];
 
-  const handleRequest = (e) => {
+  const handleRequest = async (e) => {
     e.preventDefault();
 
     if (!request.trim()) {
@@ -23,24 +24,55 @@ function RequestPage() {
       return;
     }
 
-    // Temporary demo decision
-    if (
-      request.toLowerCase().includes("delete") ||
-      request.toLowerCase().includes("export")
-    ) {
-      setResult({
-        type: "blocked",
-        title: "Access Blocked",
-        message: "Policy Engine denied this request.",
-        reason: "Agent does not have permission for this action.",
+    setLoading(true);
+    setResult(null);
+
+    try {
+      const token = localStorage.getItem("access_token");
+
+      const response = await fetch("http://127.0.0.1:8000/request", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ request_text: request }),
       });
-    } else {
+
+      const data = await response.json();
+
+      if (data.decision === "allowed") {
+        setResult({
+          type: "allowed",
+          title: data.message || "Access Allowed",
+          message: data.data
+            ? `Data: ${JSON.stringify(data.data)}`
+            : data.message,
+          reason: data.reason,
+        });
+      } else if (data.decision === "blocked") {
+        setResult({
+          type: "blocked",
+          title: "Access Blocked",
+          message: data.message,
+          reason: data.reason,
+        });
+      } else {
+        setResult({
+          type: "error",
+          title: "Error",
+          message: data.message || "Something went wrong.",
+        });
+      }
+    } catch (error) {
       setResult({
-        type: "allowed",
-        title: "Access Allowed",
-        message: "Policy Engine approved this request.",
-        reason: "Required permission is available.",
+        type: "error",
+        title: "Connection Error",
+        message: "Unable to connect to server.",
       });
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -78,7 +110,7 @@ function RequestPage() {
           <div className="profile-avatar">👤</div>
 
           <div>
-            <strong>Customer</strong>
+            <strong>{localStorage.getItem("username") || "Customer"}</strong>
             <span>Authenticated</span>
           </div>
         </div>
@@ -210,9 +242,9 @@ function RequestPage() {
 
 
             {/* BUTTON */}
-            <button className="send-button" type="submit">
+            <button className="send-button" type="submit" disabled={loading}>
               <span>🚀</span>
-              Send Secure Request
+              {loading ? "Sending..." : "Send Secure Request"}
               <span className="button-arrow">→</span>
             </button>
 

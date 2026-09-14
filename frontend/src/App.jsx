@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 import RequestPage from "./RequestPage";
-import "./App.css";
+import AdminDashboard from "./AdminDashboard";
 
 function App() {
   const [username, setUsername] = useState("");
@@ -9,52 +9,59 @@ function App() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-const handleLogin = async (e) => {
-  e.preventDefault();
+  const [role, setRole] = useState("");
 
-  setError("");
+  const handleLogin = async (e) => {
+    e.preventDefault();
 
-  if (!username || !password) {
-    setError("Please enter username and password.");
-    return;
-  }
+    setError("");
 
-  try {
-    const response = await fetch("http://127.0.0.1:8000/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: username,
-        password: password,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      setError(data.detail || "Invalid username or password.");
+    if (!username || !password) {
+      setError("Please enter username and password.");
       return;
     }
 
-    // Save JWT token
-localStorage.setItem("access_token", data.access_token);
+    try {
+      const response = await fetch("http://127.0.0.1:8000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password,
+        }),
+      });
 
-// Open Request Page
-setIsLoggedIn(true);
+      const data = await response.json();
 
-  } catch (error) {
-    setError("Unable to connect to server.");
-    console.error(error);
+      if (!response.ok) {
+        setError(data.detail || "Invalid username or password.");
+        return;
+      }
+
+      // Save JWT token and role
+      localStorage.setItem("access_token", data.access_token);
+      localStorage.setItem("role", data.role);
+      localStorage.setItem("username", data.username);
+
+      setRole(data.role);
+      setIsLoggedIn(true);
+
+    } catch (error) {
+      setError("Unable to connect to server.");
+      console.error(error);
+    }
+  };
+
+  if (isLoggedIn) {
+    if (role === "admin") {
+      return <AdminDashboard />;
+    }
+    return <RequestPage />;
   }
-};
 
-if (isLoggedIn) {
-  return <RequestPage />;
-}
-
-return (
+  return (
     <div className="login-page">
 
       <div className="glow glow-one"></div>

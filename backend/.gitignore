@@ -1,0 +1,13 @@
+.env
+__pycache__/
+*.pyc
+
+# Hospital data - keep local
+hospital_rawdata/
+hospital_cleanedata/
+
+venv/
+backend/venv/
+node_modules/
+dist/
+*.log
