@@ -1,0 +1,51 @@
+student_id,gender,parental_level_of_education,test_preparation_course,math_score,reading_score,writing_score,student_name,email,department_id,semester,academic_year,average_score,performance_status
+1,Female,Bachelor'S Degree,None,72,72,74,Student 01,student01@example.com,1,7,2026-2027,72.67,Average
+2,Female,Some College,Completed,69,90,88,Student 02,student02@example.com,1,7,2026-2027,82.33,Good
+3,Female,Master'S Degree,None,90,95,93,Student 03,student03@example.com,1,7,2026-2027,92.67,Good
+4,Male,Associate'S Degree,None,47,57,44,Student 04,student04@example.com,1,7,2026-2027,49.33,Needs Improvement
+5,Male,Some College,None,76,78,75,Student 05,student05@example.com,1,7,2026-2027,76.33,Good
+6,Female,Associate'S Degree,None,71,83,78,Student 06,student06@example.com,1,7,2026-2027,77.33,Good
+7,Female,Some College,Completed,88,95,92,Student 07,student07@example.com,1,7,2026-2027,91.67,Good
+8,Male,Some College,None,40,43,39,Student 08,student08@example.com,1,7,2026-2027,40.67,Needs Improvement
+9,Male,High School,Completed,64,64,67,Student 09,student09@example.com,1,7,2026-2027,65.0,Average
+10,Female,High School,None,38,60,50,Student 10,student10@example.com,1,7,2026-2027,49.33,Needs Improvement
+11,Male,Associate'S Degree,None,58,54,52,Student 11,student11@example.com,1,7,2026-2027,54.67,Average
+12,Male,Associate'S Degree,None,40,52,43,Student 12,student12@example.com,1,7,2026-2027,45.0,Needs Improvement
+13,Female,High School,None,65,81,73,Student 13,student13@example.com,1,7,2026-2027,73.0,Average
+14,Male,Some College,Completed,78,72,70,Student 14,student14@example.com,1,7,2026-2027,73.33,Average
+15,Female,Master'S Degree,None,50,53,58,Student 15,student15@example.com,1,7,2026-2027,53.67,Average
+16,Female,Some High School,None,69,75,78,Student 16,student16@example.com,1,7,2026-2027,74.0,Average
+17,Male,High School,None,88,89,86,Student 17,student17@example.com,1,7,2026-2027,87.67,Good
+18,Female,Some High School,None,18,32,28,Student 18,student18@example.com,1,7,2026-2027,26.0,Needs Improvement
+19,Male,Master'S Degree,Completed,46,42,46,Student 19,student19@example.com,1,7,2026-2027,44.67,Needs Improvement
+20,Female,Associate'S Degree,None,54,58,61,Student 20,student20@example.com,1,7,2026-2027,57.67,Average
+21,Male,High School,None,66,69,63,Student 21,student21@example.com,1,7,2026-2027,66.0,Average
+22,Female,Some College,Completed,65,75,70,Student 22,student22@example.com,1,7,2026-2027,70.0,Average
+23,Male,Some College,None,44,54,53,Student 23,student23@example.com,1,7,2026-2027,50.33,Average
+24,Female,Some High School,None,69,73,73,Student 24,student24@example.com,1,7,2026-2027,71.67,Average
+25,Male,Bachelor'S Degree,Completed,74,71,80,Student 25,student25@example.com,1,7,2026-2027,75.0,Good
+26,Male,Master'S Degree,None,73,74,72,Student 26,student26@example.com,1,7,2026-2027,73.0,Average
+27,Male,Some College,None,69,54,55,Student 27,student27@example.com,1,7,2026-2027,59.33,Average
+28,Female,Bachelor'S Degree,None,67,69,75,Student 28,student28@example.com,1,7,2026-2027,70.33,Average
+29,Male,High School,None,70,70,65,Student 29,student29@example.com,1,7,2026-2027,68.33,Average
+30,Female,Master'S Degree,None,62,70,75,Student 30,student30@example.com,1,7,2026-2027,69.0,Average
+31,Female,Some College,None,69,74,74,Student 31,student31@example.com,1,7,2026-2027,72.33,Average
+32,Female,Some College,None,63,65,61,Student 32,student32@example.com,1,7,2026-2027,63.0,Average
+33,Female,Master'S Degree,None,56,72,65,Student 33,student33@example.com,1,7,2026-2027,64.33,Average
+34,Male,Some College,None,40,42,38,Student 34,student34@example.com,1,7,2026-2027,40.0,Needs Improvement
+35,Male,Some College,None,97,87,82,Student 35,student35@example.com,1,7,2026-2027,88.67,Good
+36,Male,Associate'S Degree,Completed,81,81,79,Student 36,student36@example.com,1,7,2026-2027,80.33,Good
+37,Female,Associate'S Degree,None,74,81,83,Student 37,student37@example.com,1,7,2026-2027,79.33,Good
+38,Female,Some High School,None,50,64,59,Student 38,student38@example.com,1,7,2026-2027,57.67,Average
+39,Female,Associate'S Degree,Completed,75,90,88,Student 39,student39@example.com,1,7,2026-2027,84.33,Good
+40,Male,Associate'S Degree,None,57,56,57,Student 40,student40@example.com,1,7,2026-2027,56.67,Average
+41,Male,Associate'S Degree,None,55,61,54,Student 41,student41@example.com,1,7,2026-2027,56.67,Average
+42,Female,Associate'S Degree,None,58,73,68,Student 42,student42@example.com,1,7,2026-2027,66.33,Average
+43,Female,Associate'S Degree,None,53,58,65,Student 43,student43@example.com,1,7,2026-2027,58.67,Average
+44,Male,Some College,Completed,59,65,66,Student 44,student44@example.com,1,7,2026-2027,63.33,Average
+45,Female,Associate'S Degree,None,50,56,54,Student 45,student45@example.com,1,7,2026-2027,53.33,Average
+46,Male,Associate'S Degree,None,65,54,57,Student 46,student46@example.com,1,7,2026-2027,58.67,Average
+47,Female,Associate'S Degree,Completed,55,65,62,Student 47,student47@example.com,1,7,2026-2027,60.67,Average
+48,Female,High School,None,66,71,76,Student 48,student48@example.com,1,7,2026-2027,71.0,Average
+49,Female,Associate'S Degree,Completed,57,74,76,Student 49,student49@example.com,1,7,2026-2027,69.0,Average
+50,Male,High School,Completed,82,84,82,Student 50,student50@example.com,1,7,2026-2027,82.67,Good
