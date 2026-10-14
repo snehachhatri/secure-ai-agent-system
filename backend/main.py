@@ -5,7 +5,10 @@ import re
 # Add root-level folders to Python path
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "agents"))
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "policy_engine"))
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", "injection_detector"))
 
+
+from detector import detect
 from customer_agent import CustomerSupportAgent
 from malicious_agent import MaliciousTestAgent
 from policy_checker import check_permission
@@ -109,6 +112,26 @@ async def handle_request(payload: RequestPayload, authorization: str = Header(No
     role = user_data["role"]
     username = user_data["username"]
 
+        # ---- Prompt injection check (agent se PEHLE) ----
+    inj = detect(payload.request_text)
+
+    if inj.action == "block":
+        await requests_logs_collection.insert_one({
+            "username": username,
+            "role": role,
+            "request_text": payload.request_text,
+            "action": "PROMPT_INJECTION",
+            "decision": "blocked",
+            "reason": inj.reason,
+            "injection_score": inj.risk_score,
+            "severity": "high",
+        })
+        return {
+            "decision": "blocked",
+            "message": "Access Blocked",
+            "reason": "Suspicious request detected. This attempt has been logged.",
+        }
+
     # For demo: every normal request goes through Customer Support Agent
     agent = CustomerSupportAgent()
 
@@ -132,7 +155,11 @@ async def handle_request(payload: RequestPayload, authorization: str = Header(No
         "action": action,
         "customer_id": customer_id,
         "decision": "allowed" if is_allowed else "blocked",
-    }
+         "injection_score": inj.risk_score,
+                 "severity": "medium" if inj.action == "flag" else "none",
+      }
+
+        
 
     if not is_allowed:
         await requests_logs_collection.insert_one(log_entry)
