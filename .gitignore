@@ -5,3 +5,10 @@ __pycache__/
 # Hospital data - keep local
 hospital_rawdata/
 hospital_cleanedata/
+
+# Node.js
+node_modules/
+
+# Environment files
+.env.*
+!.env.example
