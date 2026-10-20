@@ -1,13 +1,10 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
-class SignupRequest(BaseModel):
-    username: str
-    password: str
-    role: str = "user"   # "user" ya "admin"
 
 class LoginRequest(BaseModel):
-    username: str
-    password: str
+    username: str = Field(min_length=1, max_length=50)
+    password: str = Field(min_length=1, max_length=128)
+
 
 class RequestPayload(BaseModel):
-    request_text: str
+    request_text: str = Field(min_length=1, max_length=2000)

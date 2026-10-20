@@ -11,3 +11,4 @@ backend/venv/
 node_modules/
 dist/
 *.log
+seed_credentials.txt
