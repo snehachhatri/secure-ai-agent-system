@@ -4,7 +4,8 @@ from datetime import datetime, timedelta, timezone
 
 import jwt
 from dotenv import load_dotenv
-from fastapi import Header, HTTPException
+from fastapi import Depends, HTTPException
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from passlib.context import CryptContext
 
 from database import fetch_one
@@ -22,6 +23,8 @@ if len(JWT_SECRET) < 32:
     )
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# /docs par "Authorize" button deta hai (sirf token paste karna hota hai)
+bearer_scheme = HTTPBearer(auto_error=False)
 # User na mile tab bhi hash verify chalate hain, taaki response time se username ka pata na chale
 _DUMMY_HASH = pwd_context.hash("dummy-password-for-timing")
 
@@ -81,15 +84,15 @@ def decode_access_token(token: str):
         return None
 
 
-def get_current_user(authorization: str = Header(None)) -> dict:
+def get_current_user(creds: HTTPAuthorizationCredentials = Depends(bearer_scheme)) -> dict:
     """
     Token sirf 'kaun hai' batata hai. Role, ID aur is_locked HAMESHA DB se fresh padhte hain,
     taaki lock ya role badalne ka asar turant ho (purane token se bypass na ho).
     Policy engine ko yahi dict milta hai (password_hash hata ke).
     """
-    if not authorization or not authorization.startswith("Bearer "):
+    if creds is None or creds.scheme.lower() != "bearer":
         raise HTTPException(status_code=401, detail="Missing or invalid token")
-    claims = decode_access_token(authorization.split(" ", 1)[1])
+    claims = decode_access_token(creds.credentials)
     if not claims or "user_id" not in claims:
         raise HTTPException(status_code=401, detail="Invalid or expired token")
     user = get_user_by_id(claims["user_id"])

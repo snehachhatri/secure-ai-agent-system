@@ -10,9 +10,11 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "..", "anomaly_detector"
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
+from audit import write_alert, write_log
 from auth import create_access_token, get_current_user, get_user_by_username, verify_or_dummy
 from database import fetch_one
-from models import LoginRequest
+from detector import detect
+from models import LoginRequest, RequestPayload
 
 app = FastAPI(title="Secure AI Agent System")
 
@@ -80,3 +82,39 @@ def me(user: dict = Depends(get_current_user)):
     if user["is_locked"]:
         raise HTTPException(status_code=403, detail="Account locked. Contact the administrator.")
     return user
+
+
+# ---------------- Gateway (Step 1): injection check + audit log ----------------
+
+@app.post("/request")
+def handle_request(payload: RequestPayload, user: dict = Depends(get_current_user)):
+    if user["is_locked"]:
+        raise HTTPException(status_code=403, detail="Account locked. Contact the administrator.")
+
+    text = payload.request_text
+
+    # 1. Prompt injection check (agent se PEHLE)
+    inj = detect(text)
+    details = {"injection_score": inj.risk_score, "signals": inj.signals,
+               "categories": sorted({m["category"] for m in inj.matches})}
+
+    if inj.action == "block":
+        try:
+            write_log(user, text, "PROMPT_INJECTION", "blocked", inj.reason, "injection_detector", details)
+            write_alert(user["user_id"], "PROMPT_INJECTION", "high", inj.reason)
+        except Exception as e:      # block to ho hi raha hai; log fail hua to server par dikhao
+            print("AUDIT WRITE FAILED (blocked request):", e)
+        # User ko detail nahi (warna attacker seekh jayega ki kya pakda gaya)
+        return {"decision": "blocked", "message": "Request blocked. This attempt has been logged."}
+
+    # 2. Audit log likhe bina aage nahi badhte (fail closed)
+    try:
+        write_log(user, text, "NONE", "pending", "passed injection check", "injection_detector", details)
+        if inj.action == "flag":
+            write_alert(user["user_id"], "SUSPICIOUS_REQUEST", "medium", inj.reason)
+    except Exception as e:
+        print("AUDIT WRITE FAILED:", e)
+        raise HTTPException(status_code=503, detail="Service temporarily unavailable.")
+
+    # Agent, policy engine aur DB actions agle steps mein judenge
+    return {"decision": "pending", "message": "Request passed the security check. The agent is not connected yet."}
