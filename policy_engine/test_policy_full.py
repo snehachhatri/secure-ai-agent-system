@@ -28,7 +28,6 @@ tests = [
     ("student: apni fees",             student, "READ_FEES", {"student_id": 101}, T),
     ("student: apni attendance",       student, "READ_ATTENDANCE", {"student_id": 101}, T),
     ("student: apna revaluation",      student, "REGISTER_REVALUATION", {"student_id": 101, "subject_id": 10}, T),
-    ("student: apne faculty ki availability", student, "READ_FACULTY_AVAILABILITY", {"faculty_id": 1}, T),
     ("student: apni notifications",    student, "READ_NOTIFICATIONS", {"user_id": 1}, T),
     ("student: Priya ka marks",        student, "READ_MARKS", {"student_id": 102}, F),
     ("student: Priya ki fees",         student, "READ_FEES", {"student_id": 102}, F),
@@ -36,10 +35,8 @@ tests = [
     ("student: marks update",          student, "UPDATE_MARKS", {"student_id": 101, "subject_id": 10, "value": 95, "semester": 5}, F),
     ("student: delete record",         student, "DELETE_STUDENT", {"student_id": 101}, F),
     ("student: logs dekhna",           student, "READ_LOGS", {}, F),
-    ("student: dusre subject ke faculty", student, "READ_FACULTY_AVAILABILITY", {"faculty_id": 2}, F),
     ("student: dusre ki notifications", student, "READ_NOTIFICATIONS", {"user_id": 99}, F),
     ("student: marks bina student_id", student, "READ_MARKS", {}, F),
-    ("student: chutti set karna",      student, "SET_OWN_LEAVE", {"faculty_id": 1, "start_date": d(1), "end_date": d(1)}, F),
 
     # ---------- FACULTY (id=1, subjects 10, 11; sem 5 unpublished, sem 4 published) ----------
     ("faculty: apna subject marks dekhna", faculty, "READ_MARKS", {"subject_id": 10}, T),
@@ -62,13 +59,6 @@ tests = [
     ("faculty: 'Role' (capital) badalna", faculty, "UPDATE_OWN_PROFILE", {"faculty_id": 1, "fields": ["Role"]}, F),
     ("faculty: dusri faculty ki profile", faculty, "UPDATE_OWN_PROFILE", {"faculty_id": 2, "fields": ["phone"]}, F),
     ("faculty: khaali fields",         faculty, "UPDATE_OWN_PROFILE", {"faculty_id": 1, "fields": []}, F),
-    ("faculty: kal ki chutti",         faculty, "SET_OWN_LEAVE", {"faculty_id": 1, "start_date": d(1), "end_date": d(1)}, T),
-    ("faculty: 3 din ki chutti",       faculty, "SET_OWN_LEAVE", {"faculty_id": 1, "start_date": d(1), "end_date": d(3)}, T),
-    ("faculty: dusri faculty ki chutti", faculty, "SET_OWN_LEAVE", {"faculty_id": 2, "start_date": d(1), "end_date": d(1)}, F),
-    ("faculty: 30 din chutti",         faculty, "SET_OWN_LEAVE", {"faculty_id": 1, "start_date": d(1), "end_date": d(30)}, F),
-    ("faculty: past date chutti",      faculty, "SET_OWN_LEAVE", {"faculty_id": 1, "start_date": d(-5), "end_date": d(-4)}, F),
-    ("faculty: end < start",           faculty, "SET_OWN_LEAVE", {"faculty_id": 1, "start_date": d(3), "end_date": d(1)}, F),
-    ("faculty: apni chutti cancel",    faculty, "CANCEL_OWN_LEAVE", {"faculty_id": 1}, T),
     ("faculty: student data dekhna",   faculty, "READ_STUDENT", {"student_id": 101}, F),
     ("faculty: approve change",        faculty, "APPROVE_MARKS_CHANGE", {"student_id": 101}, F),
     ("faculty: delete student",        faculty, "DELETE_STUDENT", {"student_id": 101}, F),
@@ -85,7 +75,6 @@ tests = [
     ("hod: marks update",              hod, "UPDATE_MARKS", {"subject_id": 30, "value": 50, "semester": 5}, F),
     ("hod: fees dekhna",               hod, "READ_FEES", {"student_id": 101}, F),
     ("hod: apni profile",              hod, "UPDATE_OWN_PROFILE", {"faculty_id": 4, "fields": ["phone"]}, T),
-    ("hod: apni chutti",               hod, "SET_OWN_LEAVE", {"faculty_id": 4, "start_date": d(1), "end_date": d(2)}, T),
     ("hod: logs dekhna",               hod, "READ_LOGS", {}, F),
 
     # ---------- ADMIN ----------

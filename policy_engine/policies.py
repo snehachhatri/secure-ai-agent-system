@@ -16,11 +16,10 @@ PROFILE_FIELDS = ["phone", "address", "office_hours", "email"]
 
 POLICIES = {
     "student": {
-        "READ_MARKS":                {"condition": "own_student"},
-        "READ_FEES":                 {"condition": "own_student"},
-        "READ_ATTENDANCE":           {"condition": "own_student"},
-        "REGISTER_REVALUATION":      {"condition": "own_student"},
-        "READ_FACULTY_AVAILABILITY": {"condition": "teaches_me"},
+        "READ_MARKS":           {"condition": "own_student"},
+        "READ_FEES":            {"condition": "own_student"},
+        "READ_ATTENDANCE":      {"condition": "own_student"},
+        "REGISTER_REVALUATION": {"condition": "own_student"},
         **NOTIFICATION_RULES,
     },
     "faculty": {
@@ -34,8 +33,6 @@ POLICIES = {
                                  "min_value": 0, "max_value": 100,
                                  "result_must_be": "published"},
         "UPDATE_OWN_PROFILE":   {"condition": "own_profile", "allowed_fields": PROFILE_FIELDS},
-        "SET_OWN_LEAVE":        {"condition": "own_faculty", "max_days": 7},
-        "CANCEL_OWN_LEAVE":     {"condition": "own_faculty"},
         **NOTIFICATION_RULES,
     },
     "hod": {
@@ -43,10 +40,8 @@ POLICIES = {
         "READ_MARKS":            {"condition": "own_department"},
         "LIST_FAILING_STUDENTS": {"condition": "own_department"},
         "APPROVE_MARKS_CHANGE":  {"condition": "own_department"},
-        # HOD bhi faculty hai: apni profile aur chutti
+        # HOD bhi faculty hai: apni profile
         "UPDATE_OWN_PROFILE":    {"condition": "own_profile", "allowed_fields": PROFILE_FIELDS},
-        "SET_OWN_LEAVE":         {"condition": "own_faculty", "max_days": 7},
-        "CANCEL_OWN_LEAVE":      {"condition": "own_faculty"},
         **NOTIFICATION_RULES,
     },
     "admin": {
