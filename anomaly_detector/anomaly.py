@@ -13,9 +13,6 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Optional
 
-import numpy as np
-from sklearn.ensemble import IsolationForest
-
 CONFIG = {
     "alert_threshold": 30,
     "high_threshold": 60,
@@ -124,6 +121,9 @@ class _MLModel:
         self.floor = -1.0
 
     def fit(self, rows):
+        import numpy as np
+        from sklearn.ensemble import IsolationForest
+
         X = np.array([[r[k] for k in FEATURES] for r in rows], dtype=float)
         self.model = IsolationForest(n_estimators=150, contamination="auto", random_state=42)
         self.model.fit(X)
@@ -133,6 +133,8 @@ class _MLModel:
         return self
 
     def score(self, f: dict) -> int:
+        import numpy as np
+
         x = np.array([[f[k] for k in FEATURES]], dtype=float)
         d = float(self.model.decision_function(x)[0])
         if d >= self.threshold:
